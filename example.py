@@ -64,8 +64,6 @@ def callback(bot, update):
         if cb_data == 'callback data 2':
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['cell']) for x in r])
             s = '\n'.join(l)
-            bot.editMessageText(chat_id=chat_id, message_id=message_id,
-                                text='[Lista Prenotati con Cellulare]\n\n' + s)
             keyboard = EzTG.Keyboard('inline')
             keyboard.add('Lista prenotati', 'callback data')
             keyboard.newLine()
@@ -74,12 +72,13 @@ def callback(bot, update):
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
+            bot.editMessageText(chat_id=chat_id, message_id=message_id,
+                                text='[Lista Prenotati con Cellulare]\n\n' + s)
         
         if cb_data == 'callback data 3':
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['email']) for x in r])
             s = '\n'.join(l)
-            bot.editMessageText(chat_id=chat_id, message_id=message_id,
-                                text='[Lista Prenotati con Email]\n\n' + s)
+            keyboard = EzTG.Keyboard('inline')
             keyboard.add('Lista prenotati', 'callback data')
             keyboard.newLine()
             keyboard.add('Numeri di telefono', 'callback data 2')
@@ -87,10 +86,12 @@ def callback(bot, update):
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
+            bot.editMessageText(chat_id=chat_id, message_id=message_id,
+                                text='[Lista Prenotati con Email]\n\n' + s)
 
         if cb_data == 'callback data 4':
             total = len(r)
-            bot.editMessageText(chat_id=chat_id, message_id=message_id, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
+            keyboard = EzTG.Keyboard('inline')
             keyboard.add('Lista prenotati', 'callback data')
             keyboard.newLine()
             keyboard.add('Numeri di telefono', 'callback data 2')
@@ -98,6 +99,7 @@ def callback(bot, update):
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
+            bot.editMessageText(chat_id=chat_id, message_id=message_id, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
 
 
 bot = EzTG.EzTG(token='1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE',
