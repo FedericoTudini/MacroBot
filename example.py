@@ -1,7 +1,8 @@
 import EzTG
+import requests
+import json
 
-
-async def callback(bot, update):
+def callback(bot, update):
     # here's your bot
     if 'message' in update:
         # messages "handler"
@@ -11,17 +12,13 @@ async def callback(bot, update):
         text = update['message']['text']
 
         if text == '/start':
-            await bot.sendMessage(chat_id=chat_id, text='EzTGPy example bot\n\nCommands:\n/inline\n/keyboard\n/hidekb\n\nYour id: %s\nChat id: %s\nMessage id: %s' %
-                            (user_id, chat_id, message_id))  # you can find method parameters in https://core.telegram.org/bots/api#sendmessage
-
-        if text == '/inline':
             keyboard = EzTG.Keyboard('inline')
-            keyboard.add('Example', 'callback data')
-            keyboard.add('Example 2', 'callback data 2')
+            keyboard.add('Lista prenotati', 'callback data')
             keyboard.newLine()
-            keyboard.add('Example 3', 'https://google.it')
-            await bot.sendMessage(chat_id=chat_id, text='Test',
-                            reply_markup=keyboard)
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            bot.sendMessage(chat_id=chat_id, text='Ciao sono il Bot per gli eventi del Macro!\nScegli uno dei seguenti comandi:\n', reply_markup=keyboard)  # you can find method parameters in https://core.telegram.org/bots/api#sendmessage
 
         if text == '/keyboard':
             keyboard = EzTG.Keyboard('keyboard')
@@ -29,12 +26,12 @@ async def callback(bot, update):
             keyboard.add('Example 2')
             keyboard.newLine()
             keyboard.add('Example 3')
-            await bot.sendMessage(chat_id=chat_id, text='Test',
+            bot.sendMessage(chat_id=chat_id, text='Test',
                             reply_markup=keyboard)
 
         if text == '/hidekb':
             keyboard = EzTG.Keyboard('remove')
-            await bot.sendMessage(chat_id=chat_id,
+            bot.sendMessage(chat_id=chat_id,
                             text='Adios keyboard', reply_markup=keyboard)
     if 'callback_query' in update:
         # callback query "handler"
@@ -45,18 +42,29 @@ async def callback(bot, update):
         cb_data = update['callback_query']['data']
 
         if cb_data == 'callback data':
-            await bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
-            keyboard = EzTG.Keyboard('inline')
-            keyboard.add('Example 2', 'callback data 2')
-            await bot.editMessageText(chat_id=chat_id, message_id=message_id,
-                                text='New message', reply_markup=keyboard)  # you can find method parameters in https://core.telegram.org/bots/api#editmessagetext
+            #bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
+            #keyboard = EzTG.Keyboard('inline')
+            #keyboard.add('Example 2', 'callback data 2')
+            r = requests.get("http://3.143.236.50:3000/clients").json()
+            l = sorted([x['nomeCompleto'] for x in r])
+            s = '\n'.join(l)
+            bot.editMessageText(chat_id=chat_id, message_id=message_id,
+                                text='[Lista Prenotati]\n\n' + s + '\n\nTotale: ' + str(len(l)) + ' prenotati\n')  # you can find method parameters in https://core.telegram.org/bots/api#editmessagetext
 
         if cb_data == 'callback data 2':
-            await bot.answerCallbackQuery(
-                callback_query_id=cb_id, text='example #2 [alert]', show_alert=True)
-            await bot.editMessageText(chat_id=chat_id, message_id=message_id,
-                                text='New message 2', reply_markup={})
+            r = requests.get("http://3.143.236.50:3000/clients").json()
+            l = sorted([x['nomeCompleto'] + '\n\t' + str(x['cell']) for x in r])
+            s = '\n'.join(l)
+            bot.editMessageText(chat_id=chat_id, message_id=message_id,
+                                text='[Lista Prenotati con Cellulare]\n\n' + s) 
+        
+        if cb_data == 'callback data 3':
+            r = requests.get("http://3.143.236.50:3000/clients").json()
+            l = sorted([x['nomeCompleto'] + '\n\t' + str(x['email']) for x in r])
+            s = '\n'.join(l)
+            bot.editMessageText(chat_id=chat_id, message_id=message_id,
+                                text='[Lista Prenotati con Email]\n\n' + s) 
 
 
-bot = EzTG.EzTG(token='your bot token',
+bot = EzTG.EzTG(token='1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE',
                 callback=callback)

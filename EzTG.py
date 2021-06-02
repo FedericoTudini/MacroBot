@@ -1,9 +1,8 @@
 import typing
+import requests
 import urllib.parse
 import warnings
 import json
-import asyncio
-import aiohttp
 
 
 class APIException(Exception):
@@ -11,53 +10,53 @@ class APIException(Exception):
 
 
 class EzTG:
-    def __init__(self, token: str, callback: typing.Callable, throw_telegram_errors=True, endpoint='https://api.telegram.org', offset: int = -1, timeout: int = 10):
+    def __init__(self, token: str, callback: typing.Callable, base=False, throw_telegram_errors=True, endpoint='https://api.telegram.org', offset: int = -1, timeout: int = 10):
         self.token = token
         self.callback = callback
         self.endpoint = endpoint
         self.offset = offset
         self.timeout = timeout
         self.throw_telegram_errors = throw_telegram_errors
-        self.session = aiohttp.ClientSession()
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._getUpdates())
+        if base == False:  # base serve x non fare getupdates e wuindi se non serve pigliare mex
+            self._getUpdates()
 
-    async def _getUpdates(self):
+    def _getUpdates(self):
         updates = {}
         while True:
             try:
-                updates = await self._telegramRequest(
+                updates = self._telegramRequest(
                     'getUpdates', {'offset': self.offset, 'timeout': self.timeout})
             except Exception as e:
                 warnings.warn(str(e))
             for update in updates:
                 self.offset = update['update_id'] + 1
-                await self.processUpdate(update)
+                self.processUpdate(update)
 
-    async def processUpdate(self, update):
-        return await self.callback(self, update)
+    def processUpdate(self, update):
+        return self.callback(self, update)
 
-    async def _telegramRequest(self, method, params={}):
-        async with self.session.post(self.endpoint + '/bot' + self.token + '/' + urllib.parse.quote(method), data=params) as r:
-            response = await r.json()
-            if response['ok'] == True and 'result' in response:
-                return response['result']
-            else:
-                if response['ok'] == False and 'description' in response:
-                    if self.throw_telegram_errors:
-                        raise APIException(response['description'])
-                    else:
-                        warnings.warn(response['description'])
+    def _telegramRequest(self, method, params={}):
+        r = requests.post(self.endpoint + '/bot' + self.token +
+                          '/' + urllib.parse.quote(method), data=params)
+        response = r.json()
+        if response['ok'] == True and 'result' in response:
+            return response['result']
+        else:
+            if response['ok'] == False and 'description' in response:
+                if self.throw_telegram_errors:
+                    raise APIException(response['description'])
                 else:
-                    if self.throw_telegram_errors:
-                        raise APIException('Unknown error')
-                    else:
-                        warnings.warn('Unknown error')
-                return response
+                    warnings.warn(response['description'])
+            else:
+                if self.throw_telegram_errors:
+                    raise APIException('Unknown error')
+                else:
+                    warnings.warn('Unknown error')
+            return response
 
     def __getattr__(self, name):
-        async def function(**kwargs):
-            return await self._telegramRequest(name, kwargs)
+        def function(**kwargs):
+            return self._telegramRequest(name, kwargs)
         return function
 
 
