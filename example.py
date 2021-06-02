@@ -10,7 +10,6 @@ def callback(bot, update):
         user_id = update['message']['from']['id']
         chat_id = update['message']['chat']['id']
         text = update['message']['text']
-        r = requests.get("http://3.143.236.50:3000/clients").json()
 
         if text == '/start':
             keyboard = EzTG.Keyboard('inline')
@@ -43,6 +42,7 @@ def callback(bot, update):
         chat_id = update['callback_query']['message']['chat']['id']
         cb_id = update['callback_query']['id']
         cb_data = update['callback_query']['data']
+        r = requests.get("http://3.143.236.50:3000/clients").json()
 
         if cb_data == 'callback data':
             #bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
