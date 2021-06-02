@@ -44,37 +44,60 @@ def callback(bot, update):
         cb_data = update['callback_query']['data']
         r = requests.get("http://3.143.236.50:3000/clients").json()
 
-        keyboard = EzTG.Keyboard('inline')
-        keyboard.add('Lista prenotati', 'callback data')
-        keyboard.newLine()
-        keyboard.add('Numeri di telefono', 'callback data 2')
-        keyboard.newLine()
-        keyboard.add('Indirizzi e-mail', 'callback data 3')
-        keyboard.newLine()
-        keyboard.add('Contatori', 'callback data 4')
-
         if cb_data == 'callback data':
             #bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
             #keyboard = EzTG.Keyboard('inline')
             #keyboard.add('Example 2', 'callback data 2')
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Lista prenotati', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
             l = sorted([x['nomeCompleto'] for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati]\n\n' + s + '\n\nTotale: ' + str(len(l)) + ' prenotati\n')  # you can find method parameters in https://core.telegram.org/bots/api#editmessagetext
 
         if cb_data == 'callback data 2':
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Lista prenotati', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['cell']) for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati con Cellulare]\n\n' + s) 
         
         if cb_data == 'callback data 3':
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Lista prenotati', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['email']) for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati con Email]\n\n' + s)
         if cb_data == 'callback data 4':
             total = len(r)
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Lista prenotati', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
 
 
