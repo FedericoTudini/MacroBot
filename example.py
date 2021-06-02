@@ -45,7 +45,7 @@ def callback(bot, update):
         r = requests.get("http://3.143.236.50:3000/clients").json()
 
         if cb_data == 'callback data':
-            #bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
+            bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
             #keyboard = EzTG.Keyboard('inline')
             #keyboard.add('Example 2', 'callback data 2')
             l = sorted([x['nomeCompleto'] for x in r])
@@ -62,6 +62,7 @@ def callback(bot, update):
             keyboard.add('Contatori', 'callback data 4')
 
         if cb_data == 'callback data 2':
+            bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['cell']) for x in r])
             s = '\n'.join(l)
             keyboard = EzTG.Keyboard('inline')
@@ -76,6 +77,7 @@ def callback(bot, update):
                                 text='[Lista Prenotati con Cellulare]\n\n' + s)
         
         if cb_data == 'callback data 3':
+            bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['email']) for x in r])
             s = '\n'.join(l)
             keyboard = EzTG.Keyboard('inline')
@@ -90,6 +92,7 @@ def callback(bot, update):
                                 text='[Lista Prenotati con Email]\n\n' + s)
 
         if cb_data == 'callback data 4':
+            bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')
             total = len(r)
             keyboard = EzTG.Keyboard('inline')
             keyboard.add('Lista prenotati', 'callback data')
