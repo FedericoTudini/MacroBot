@@ -66,7 +66,7 @@ def callback(bot, update):
                                 text='[Lista Prenotati con Email]\n\n' + s)
         if cb_data == 'callback data 4':
             total = len(r)
-            bot.editMessageText(chat_id=chat_id, message_id=message_id, text='[Contatori]\n\n' + str(total))
+            bot.editMessageText(chat_id=chat_id, message_id=message_id, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
 
 
 bot = EzTG.EzTG(token='1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE',
