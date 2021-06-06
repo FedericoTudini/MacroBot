@@ -4,20 +4,6 @@ import json
 import pandas as pd
 import csv
 
-def create_keyboard():
-    keyboard = EzTG.Keyboard('inline')
-    keyboard.add('Nominativi', 'callback data')
-    keyboard.newLine()
-    keyboard.add('Numeri di telefono', 'callback data 2')
-    keyboard.newLine()
-    keyboard.add('Indirizzi e-mail', 'callback data 3')
-    keyboard.newLine()
-    keyboard.add('Contatori', 'callback data 4')
-    keyboard.newLine()
-    keyboard.add('Download CSV', 'callback data 5')
-    return keyboard
-
-
 def callback(bot, update):
     # here's your bot
     if 'message' in update:
@@ -28,7 +14,16 @@ def callback(bot, update):
         text = update['message']['text']
 
         if text == '/start':
-            keyboard = create_keyboard()
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('Download CSV', 'callback data 5')
             bot.sendMessage(chat_id=chat_id, text='Ciao sono il Bot per gli eventi del Macro!\nScegli uno dei seguenti comandi:\n', reply_markup=keyboard)  # you can find method parameters in https://core.telegram.org/bots/api#sendmessage
 
         if text == '/keyboard':
@@ -57,7 +52,16 @@ def callback(bot, update):
             #bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
             #keyboard = EzTG.Keyboard('inline')
             #keyboard.add('Example 2', 'callback data 2')
-            keyboard = create_keyboard()
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('Download CSV', 'callback data 5')
 
             l = sorted([x['nomeCompleto'] for x in r])
             s = '\n'.join(l)
@@ -65,25 +69,61 @@ def callback(bot, update):
                                 text='[Lista Prenotati]\n\n' + s + '\n\nTotale: ' + str(len(l)) + ' prenotati\n')  # you can find method parameters in https://core.telegram.org/bots/api#editmessagetext
 
         if cb_data == 'callback data 2':
-            keyboard = create_keyboard()
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('Download CSV', 'callback data 5')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['cell']) for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati con Cellulare]\n\n' + s) 
         
         if cb_data == 'callback data 3':
-            keyboard = create_keyboard()
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('Download CSV', 'callback data 5')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['email']) for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati con Email]\n\n' + s)
         if cb_data == 'callback data 4':
             total = len(r)
-            keyboard = create_keyboard()
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('Download CSV', 'callback data 5')
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
 
         if cb_data == 'callback data 5':
-            keyboard = create_keyboard()
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('Download CSV', 'callback data 5')
             keys = r[0].keys()
             with open('Prenotazioni.csv', 'w', newline='')  as output_file:
                 dict_writer = csv.DictWriter(output_file, keys)
