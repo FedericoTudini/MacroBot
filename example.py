@@ -125,11 +125,12 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
             keys = r[0].keys()
-            with open('Prenotazioni.csv', 'w', newline='')  as output_file:
+            with open('Prenotazioni.csv', 'w+', newline='')  as output_file:
                 dict_writer = csv.DictWriter(output_file, keys)
                 dict_writer.writeheader()
                 dict_writer.writerows(r)
-            bot.sendDocument(chat_id=chat_id, document=open(output_file, 'rb'))
+            output_file.close()
+            bot.sendDocument(chat_id=chat_id, document=open(output_file, 'r+'))
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='Documento CSV')
 
 
