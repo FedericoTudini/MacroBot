@@ -50,8 +50,6 @@ def callback(bot, update):
 
         if cb_data == 'callback data':
             keyboard = EzTG.Keyboard('inline')
-            keyboard.add('Nominativi', 'callback data')
-            keyboard.newLine()
             keyboard.add('Numeri di telefono', 'callback data 2')
             keyboard.newLine()
             keyboard.add('Indirizzi e-mail', 'callback data 3')
@@ -69,8 +67,6 @@ def callback(bot, update):
             keyboard = EzTG.Keyboard('inline')
             keyboard.add('Nominativi', 'callback data')
             keyboard.newLine()
-            keyboard.add('Numeri di telefono', 'callback data 2')
-            keyboard.newLine()
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
@@ -86,8 +82,6 @@ def callback(bot, update):
             keyboard.add('Nominativi', 'callback data')
             keyboard.newLine()
             keyboard.add('Numeri di telefono', 'callback data 2')
-            keyboard.newLine()
-            keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
@@ -105,8 +99,6 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
-            keyboard.add('Contatori', 'callback data 4')
-            keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
 
@@ -119,10 +111,8 @@ def callback(bot, update):
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
-            keyboard.newLine()
-            keyboard.add('Download CSV', 'callback data 5')
             req = requests.get("https://macro-api.herokuapp.com/clients-filtered").json()
-            ls = sorted(req, key= lambda x : x["nomeCompleto"])
+            ls = sorted(req, key = lambda x : x["nomeCompleto"])
             keys = ls[0].keys()
             with open('Prenotazioni.csv', 'w+', newline='')  as output_file:
                 dict_writer = csv.DictWriter(output_file, keys)
