@@ -122,11 +122,12 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
             req = requests.get("https://macro-api.herokuapp.com/clients-filtered").json()
-            keys = req[0].keys()
+            ls = sorted(req, key= lambda x : x["nomeCompleto"])
+            keys = ls[0].keys()
             with open('Prenotazioni.csv', 'w+', newline='')  as output_file:
                 dict_writer = csv.DictWriter(output_file, keys)
                 dict_writer.writeheader()
-                dict_writer.writerows(req)
+                dict_writer.writerows(ls)
             output_file.close()
             files = {'document' : open("Prenotazioni.csv", "rb")}
             requests.post("https://api.telegram.org/bot1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE/sendDocument?chat_id=" + str(chat_id), files=files)
