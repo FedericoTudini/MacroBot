@@ -46,12 +46,9 @@ def callback(bot, update):
         chat_id = update['callback_query']['message']['chat']['id']
         cb_id = update['callback_query']['id']
         cb_data = update['callback_query']['data']
-        r = requests.get("http://3.143.236.50:3000/clients").json()
+        r = requests.get("https://macro-api.herokuapp.com/clients").json()
 
         if cb_data == 'callback data':
-            #bot.answerCallbackQuery(callback_query_id=cb_id, text='example #1')  # you can find method parameters in https://core.telegram.org/bots/api#answercallbackquery
-            #keyboard = EzTG.Keyboard('inline')
-            #keyboard.add('Example 2', 'callback data 2')
             keyboard = EzTG.Keyboard('inline')
             keyboard.add('Nominativi', 'callback data')
             keyboard.newLine()
@@ -124,14 +121,16 @@ def callback(bot, update):
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
-            keys = r[0].keys()
+            req = requests.get("https://macro-api.herokuapp.com/clients-filtered").json()
+            keys = req[0].keys()
             with open('Prenotazioni.csv', 'w+', newline='')  as output_file:
                 dict_writer = csv.DictWriter(output_file, keys)
                 dict_writer.writeheader()
-                dict_writer.writerows(r)
+                dict_writer.writerows(req)
             output_file.close()
-            bot.sendDocument(chat_id=chat_id, document=open(output_file, 'r+'))
-            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='Documento CSV')
+            files = {'document' : open("Prenotazioni.csv", "rb")}
+            requests.post("https://api.telegram.org/bot1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE/sendDocument?chat_id=" + str(chat_id), files=files)
+            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[ Download CSV ]')
 
 
 bot = EzTG.EzTG(token='1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE',
