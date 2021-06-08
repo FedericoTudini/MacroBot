@@ -87,7 +87,7 @@ def callback(bot, update):
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
-            l = sorted([x['nomeCompleto'] + '\n\t' + str(x['email']) for x in r])
+            l = sorted([x['nomeCompleto'] + '\n\t' + x['email'] for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati con Email]\n\n' + s)
