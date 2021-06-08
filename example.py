@@ -3,6 +3,7 @@ import requests
 import json
 import pandas as pd
 import csv
+import gender_guesser.detector as gender
 
 def callback(bot, update):
     # here's your bot
@@ -91,7 +92,6 @@ def callback(bot, update):
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
                                 text='[Lista Prenotati con Email]\n\n' + s)
         if cb_data == 'callback data 4':
-            total = len(r)
             keyboard = EzTG.Keyboard('inline')
             keyboard.add('Nominativi', 'callback data')
             keyboard.newLine()
@@ -100,7 +100,18 @@ def callback(bot, update):
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
-            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati:" + str(total) + "\n")
+            total = len(r)
+            d = gender.Detector()
+            male = 0
+            female = 0
+            unknown = 0
+            nomi = [d.get_gender(x['nomeCompleto'].split(' ')[0]) for x in r]
+            for n in nomi:
+                if (n == 'male' or n == 'mostly_male'):
+                    male += 1
+                if (n == 'female' or n == 'mostly_female'):
+                    female += 1
+            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati: " + str(total) + "\n\n" + "Male: " + str(male) + "Female: " + str(female) + "Unknown: " + str((total - male - female)))
 
         if cb_data == 'callback data 5':
             keyboard = EzTG.Keyboard('inline')
