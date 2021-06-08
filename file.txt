@@ -1,0 +1,5 @@
+'Daniele': 'female',
+'Gabriele': 'female',
+'Michele': 'female',
+'Simone': 'female',
+'Nicola': 'female',

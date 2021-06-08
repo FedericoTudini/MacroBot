@@ -101,17 +101,20 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Download CSV', 'callback data 5')
             total = len(r)
-            d = gender.Detector()
+            d = gender.Detector(case_sensitive=False)
             male = 0
             female = 0
-            unknown = 0
-            nomi = [d.get_gender(x['nomeCompleto'].split(' ')[0]) for x in r]
+            nomi = [ (x['nomeCompleto'].split(' ')[0] , d.get_gender(x['nomeCompleto'].split(' ')[0])) for x in r]
+            maleBug = ["Nicola", "Simone","Daniele", "Michele", "Gabriele"]
             for n in nomi:
-                if (n == 'male' or n == 'mostly_male'):
+                key = n[0]
+                value = n[1]
+                print(key + " : " + value + "\n")
+                if (value == 'male' or value == 'mostly_male' or key in maleBug):
                     male += 1
-                if (n == 'female' or n == 'mostly_female'):
+                elif (value == 'female' or value == 'mostly_female'):
                     female += 1
-            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati: " + str(total) + "\n\n" + "Male: " + str(male) + "Female: " + str(female) + "Unknown: " + str((total - male - female)))
+            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[Contatori]\n\n' + "Prenotati: " + str(total) + "\n\n" + "[ Bregnometro ]\n Tanta?\n" + "Male: " + str(male) + "\n" + "Female: " + str(female) + "\n" + "Unknown: " + str((total - male - female)))
 
         if cb_data == 'callback data 5':
             keyboard = EzTG.Keyboard('inline')
