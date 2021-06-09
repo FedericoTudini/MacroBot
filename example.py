@@ -24,7 +24,9 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
-            keyboard.add('Download CSV', 'callback data 5')
+            keyboard.add('CSV per Nome', 'callback data 5')
+            keyboard.newLine()
+            keyboard.add('CSV per Orario prenotazione', 'callback data 6')
             bot.sendMessage(chat_id=chat_id, text='Ciao sono il Bot per gli eventi del Macro!\nScegli uno dei seguenti comandi:\n', reply_markup=keyboard)  # you can find method parameters in https://core.telegram.org/bots/api#sendmessage
 
         if text == '/keyboard':
