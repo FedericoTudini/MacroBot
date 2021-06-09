@@ -57,8 +57,9 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
-            keyboard.add('Download CSV', 'callback data 5')
-
+            keyboard.add('CSV per Nome', 'callback data 5')
+            keyboard.newLine()
+            keyboard.add('CSV per Orario prenotazione', 'callback data 6')
             l = sorted([x['nomeCompleto'] for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
@@ -72,7 +73,9 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
-            keyboard.add('Download CSV', 'callback data 5')
+            keyboard.add('CSV per Nome', 'callback data 5')
+            keyboard.newLine()
+            keyboard.add('CSV per Orario prenotazione', 'callback data 6')
             l = sorted([x['nomeCompleto'] + '\n\t' + str(x['cell']) for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
@@ -86,7 +89,9 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
             keyboard.newLine()
-            keyboard.add('Download CSV', 'callback data 5')
+            keyboard.add('CSV per Nome', 'callback data 5')
+            keyboard.newLine()
+            keyboard.add('CSV per Orario prenotazione', 'callback data 6')
             l = sorted([x['nomeCompleto'] + '\n\t' + x['email'] for x in r])
             s = '\n'.join(l)
             bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard,
@@ -99,7 +104,9 @@ def callback(bot, update):
             keyboard.newLine()
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
-            keyboard.add('Download CSV', 'callback data 5')
+            keyboard.add('CSV per Nome', 'callback data 5')
+            keyboard.newLine()
+            keyboard.add('CSV per Orario prenotazione', 'callback data 6')
             total = len(r)
             d = gender.Detector(case_sensitive=False)
             male = 0
@@ -125,6 +132,8 @@ def callback(bot, update):
             keyboard.add('Indirizzi e-mail', 'callback data 3')
             keyboard.newLine()
             keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('CSV per Orario prenotazione', 'callback data 6')
             req = requests.get("https://macro-api.herokuapp.com/clients-filtered").json()
             ls = sorted(req, key = lambda x : x["nomeCompleto"])
             keys = ls[0].keys()
@@ -132,6 +141,28 @@ def callback(bot, update):
                 dict_writer = csv.DictWriter(output_file, keys)
                 dict_writer.writeheader()
                 dict_writer.writerows(ls)
+            output_file.close()
+            files = {'document' : open("Prenotazioni.csv", "rb")}
+            requests.post("https://api.telegram.org/bot1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE/sendDocument?chat_id=" + str(chat_id), files=files)
+            bot.editMessageText(chat_id=chat_id, message_id=message_id, reply_markup=keyboard, text='[ Download CSV ]')
+
+        if cb_data == 'callback data 6':
+            keyboard = EzTG.Keyboard('inline')
+            keyboard.add('Nominativi', 'callback data')
+            keyboard.newLine()
+            keyboard.add('Numeri di telefono', 'callback data 2')
+            keyboard.newLine()
+            keyboard.add('Indirizzi e-mail', 'callback data 3')
+            keyboard.newLine()
+            keyboard.add('Contatori', 'callback data 4')
+            keyboard.newLine()
+            keyboard.add('CSV per Nome', 'callback data 5')
+            req = requests.get("https://macro-api.herokuapp.com/clients-filtered").json()
+            keys = req[0].keys()
+            with open('Prenotazioni.csv', 'w+', newline='')  as output_file:
+                dict_writer = csv.DictWriter(output_file, keys)
+                dict_writer.writeheader()
+                dict_writer.writerows(req)
             output_file.close()
             files = {'document' : open("Prenotazioni.csv", "rb")}
             requests.post("https://api.telegram.org/bot1760533457:AAEH_JJs6ufGtqZilm1eRSKPmxy1eito-iE/sendDocument?chat_id=" + str(chat_id), files=files)
